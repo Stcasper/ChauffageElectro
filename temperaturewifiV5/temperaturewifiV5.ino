@@ -37,8 +37,8 @@ float temperature;          // Température extérieur
 float temp_int;             // Température intérieure
 float humidity;             // Humidité
 float humidity_int;         // Humidité intérieure
-float consigne=9;           // Température de consigne
-float consigneSauve=9;      // Température de consigne de sauvegarde
+float consigne=7;           // Température de consigne
+float consigneSauve=7;      // Température de consigne de sauvegarde
 int allume=0;               // Mise en route du chauffage (1 ou 0)
 DHT dht(DHTPIN, DHTTYPE);   // Capteur de température
 int modeChauf = 0;          // Mode de chauffage. 0 = Confort. 1 = Eco. 9 = Sauvegarde.
