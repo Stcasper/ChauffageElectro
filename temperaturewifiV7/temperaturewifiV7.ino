@@ -8,19 +8,19 @@
 #define DHTTYPE DHT22         // DHT 22  (AM2302)
 
 // valeurs pour le WiFi
-const char* ssid     = "rezomaizon";
-const char* password = "jepensequeprendresonpetitdejeunerlematinestmeilleur";
-//const char* ssid     = "Livebox-294C";
-//const char* password = "2DD96EE3FEAA2DCFDAD1DE7D2A";
+//const char* ssid     = "rezomaizon";
+//const char* password = "jepensequeprendresonpetitdejeunerlematinestmeilleur";
+const char* ssid     = "Livebox-294C";
+const char* password = "2DD96EE3FEAA2DCFDAD1DE7D2A";
 
 // valeurs pour le serveur Web
 const char* host     = "api.openweathermap.org";
 const char* apikey   = "f9203a3faba4eba9b6f486e5ca3e86fe"; // il est possible d'utiliser la clé d'API suivante : 1a702a15a2f46e405e61804cf67c0d30
-//const char* town     = "Blere,fr";
-const char* town     = "Meudon,fr";
+const char* town     = "Blere,fr";
+//const char* town     = "vélizy-villacoublay,fr";
 const int httpPort = 80;
 const char* serverPerso = "stcasper.free.fr";
-const int radiateur = 9;
+const int radiateur = 4;
 
 /* Code d'erreur du capteur de température */
 const byte DHT_SUCCESS = 0;        // Pas d'erreur
@@ -45,7 +45,7 @@ DHT dht(DHTPIN, DHTTYPE);   // Capteur de température
 
 int modeChauf = 0;          // Mode de chauffage. 0 = Confort. 1 = Eco. 9 = Sauvegarde.
 
-boolean debug = true;       // Mode debug
+boolean debug = false;       // Mode debug
 int temps = 0;
 int tempsSauve = 0;
 String url;
@@ -114,7 +114,7 @@ void loop() {
         /* Fin de la lecture de la température extérieure */
 
         /*Lecture de la consigne de reboot */
-        url = String("/temperature/temp_rest_dev.php?rquest=read_reboot&Radiateur=")+String(radiateur);
+        url = String("/temperature/temp_rest.php?rquest=read_reboot&Radiateur=")+String(radiateur);
    
         if (debug){
           Serial.print("Connexion au serveur : ");
@@ -137,8 +137,7 @@ void loop() {
           }
         if (reboot){
           // Remise à 0 du flag reboot
-          Serial.println("ici");
-          url = String("/temperature/temp_rest_dev.php?rquest=write_reboot");
+          url = String("/temperature/temp_rest.php?rquest=write_reboot");
           data = "Radiateur=" + (String)radiateur;
           client.connect(serverPerso, httpPort);
        
