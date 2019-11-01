@@ -20,7 +20,7 @@ const char* town     = "Blere,fr";
 //const char* town     = "vélizy-villacoublay,fr";
 const int httpPort = 80;
 const char* serverPerso = "stcasper.free.fr";
-const int radiateur = 4;
+const int radiateur = 9;
 
 /* Code d'erreur du capteur de température */
 const byte DHT_SUCCESS = 0;        // Pas d'erreur
