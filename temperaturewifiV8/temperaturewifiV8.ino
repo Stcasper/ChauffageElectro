@@ -20,7 +20,7 @@ const char* town     = "Blere,fr";
 //const char* town     = "vélizy-villacoublay,fr";
 const int httpPort = 80;
 const char* serverPerso = "stcasper.free.fr";
-const int radiateur = 5;
+const int radiateur = 4 ;
 
 /* Code d'erreur du capteur de température */
 const byte DHT_SUCCESS = 0;        // Pas d'erreur
@@ -79,7 +79,7 @@ void setup() {
     dht.begin();
 
     // On ajoute un délai de démarage proportionel au numéro du radiateur pour éviter les soucis au redémarage après coupure de courant.
-    delay(radiateur*1000);
+    delay(radiateur*5000);
     boucle = 0;
 }
 
@@ -245,11 +245,12 @@ void loop() {
 
           /* Sauvegarde des logs minute*/
           url = String("/temperature/temp_rest_re7.php?rquest=insert_temp_minute");
-          data = "temp_ext=" + (String)temperature +"&temp=" + (String)temp_int + "&Consigne=" + (String)consigne + "&Allume=" + (String)allume;
+          data = "rad=" + (String)radiateur + "&temp_ext=" + (String)temperature +"&temp=" + (String)temp_int + "&Consigne=" + (String)consigne + "&Allume=" + (String)allume;
           if (debug){
             Serial.print("Connexion au serveur : ");
             Serial.println(serverPerso);
             Serial.println(url);
+            Serial.println(data);
           }
           
           client.connect(serverPerso, httpPort);
@@ -368,11 +369,12 @@ void loop() {
   
           /* Sauvegarde des logs */
           url = String("/temperature/temp_rest_re7.php?rquest=insert_temp_minute");
-          data = "temp_ext=" + (String)temperature +"&temp=" + (String)temp_int + "&Consigne=" + (String)consigne + "&Allume=" + (String)allume;
+          data = "rad=" + (String)radiateur +  "&temp_ext=" + (String)temperature +"&temp=" + (String)temp_int + "&Consigne=" + (String)consigne + "&Allume=" + (String)allume;
           if (debug){
             Serial.print("Connexion au serveur : ");
             Serial.println(serverPerso);
             Serial.println(url);
+            Serial.println(data);
           }
           
           client.connect(serverPerso, httpPort);
