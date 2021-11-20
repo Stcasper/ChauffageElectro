@@ -20,7 +20,7 @@ const char* town     = "Blere,fr";
 //const char* town     = "vélizy-villacoublay,fr";
 const int httpPort = 80;
 const char* serverPerso = "stcasper.free.fr";
-const int radiateur = 4 ;
+const int radiateur = 6 ;
 
 /* Code d'erreur du capteur de température */
 const byte DHT_SUCCESS = 0;        // Pas d'erreur
@@ -45,7 +45,7 @@ DHT dht(DHTPIN, DHTTYPE);   // Capteur de température
 
 int modeChauf = 0;          // Mode de chauffage. 0 = Confort. 1 = Eco. 9 = Sauvegarde.
 
-boolean debug = false;       // Mode debug
+boolean debug = true;       // Mode debug
 int temps = 0;
 int tempsSauve = 0;
 String url;
@@ -119,11 +119,13 @@ void loop() {
                       "Host: " + host + "\r\n" +
                       "Connection: close\r\n\r\n");
           delay(1000);
-          lectureValeurs (client, String("\"temp\":"),String("\"humidity\":"));
+
+          byte ui = lectureValeurs (client, String("\"temp\":"),String("\"humidity\":"));
           /* Fin de la lecture de la température extérieure */
   
           /*Lecture de la consigne de reboot */
-          url = String("/temperature/temp_rest_re7.php?rquest=read_reboot&Radiateur=")+String(radiateur);
+
+          url = String("/temperature/temp_rest.php?rquest=read_reboot&Radiateur=")+String(radiateur);
      
           if (debug){
             Serial.print("Connexion au serveur : ");
@@ -146,7 +148,7 @@ void loop() {
             }
           if (reboot){
             // Remise à 0 du flag reboot
-            url = String("/temperature/temp_rest_re7.php?rquest=write_reboot");
+            url = String("/temperature/temp_rest.php?rquest=write_reboot");
             data = "Radiateur=" + (String)radiateur;
             client.connect(serverPerso, httpPort);
          
@@ -173,7 +175,7 @@ void loop() {
           /*Fin de l'éventuel reboot */
     
           /*lecture de la température de consigne */
-          url = String("/temperature/temp_rest_re7.php?rquest=read_consigne&Radiateur=")+String(radiateur);
+          url = String("/temperature/temp_rest.php?rquest=read_consigne&Radiateur=")+String(radiateur);
      
           if (debug){
             Serial.print("Connexion au serveur : ");
@@ -217,7 +219,7 @@ void loop() {
           /* Fin prise de décision chauffage*/
   
           /* Sauvegarde des logs */
-          url = String("/temperature/temp_rest_re7.php?rquest=insert_temp");
+          url = String("/temperature/temp_rest.php?rquest=insert_temp");
           data = "temp_ext=" + (String)temperature +"&temp=" + (String)temp_int + "&humi=" + (String)humidity_int + "&Consigne=" + (String)consigne + "&Radiateur=" + (String)radiateur + "&Allume=" + (String)allume;
           if (debug){
             Serial.print("Connexion au serveur : ");
@@ -274,7 +276,7 @@ void loop() {
         else {
             
           /*Lecture de la consigne de reboot */
-          url = String("/temperature/temp_rest_re7.php?rquest=read_reboot&Radiateur=")+String(radiateur);
+          url = String("/temperature/temp_rest.php?rquest=read_reboot&Radiateur=")+String(radiateur);
      
           if (debug){
             Serial.print("Connexion au serveur : ");
@@ -297,7 +299,7 @@ void loop() {
             }
           if (reboot){
             // Remise à 0 du flag reboot
-            url = String("/temperature/temp_rest_re7.php?rquest=write_reboot");
+            url = String("/temperature/temp_rest.php?rquest=write_reboot");
             data = "Radiateur=" + (String)radiateur;
             client.connect(serverPerso, httpPort);
          
@@ -324,7 +326,7 @@ void loop() {
           /*Fin de l'éventuel reboot */
     
           /*lecture de la température de consigne */
-          url = String("/temperature/temp_rest_re7.php?rquest=read_consigne&Radiateur=")+String(radiateur);
+          url = String("/temperature/temp_rest.php?rquest=read_consigne&Radiateur=")+String(radiateur);
      
           if (debug){
             Serial.print("Connexion au serveur : ");
@@ -368,7 +370,7 @@ void loop() {
           /* Fin prise de décision chauffage*/
   
           /* Sauvegarde des logs */
-          url = String("/temperature/temp_rest_re7.php?rquest=insert_temp_minute");
+          url = String("/temperature/temp_rest.php?rquest=insert_temp_minute");
           data = "rad=" + (String)radiateur +  "&temp_ext=" + (String)temperature +"&temp=" + (String)temp_int + "&Consigne=" + (String)consigne + "&Allume=" + (String)allume;
           if (debug){
             Serial.print("Connexion au serveur : ");
@@ -532,6 +534,7 @@ byte lectureValeurs(WiFiClient cli, String keyword, String keyword2) {
       }
     }
   }
+  return 1;
 }
 
 float lectureConsigne(WiFiClient cli, String keyword) {
@@ -558,5 +561,3 @@ float lectureConsigne(WiFiClient cli, String keyword) {
   }
   return resultat;
 }
-
-
